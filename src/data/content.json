@@ -1,0 +1,109 @@
+{
+  "name": "Mukil P",
+  "role": "Full Stack Developer",
+  "subtitle": "B.E. CSE Student",
+  "tagline": "Motivated 2nd-year B.E. Computer Science and Engineering student at SKCET seeking a Full Stack Developer internship. Skilled in C, C++, Java, HTML, and CSS with experience building web applications and analytical tools using AI.",
+  "location": "Erode, Tamil Nadu",
+  "phone": "+91 86676xxxxx",
+  "email": "mukilp487@gmail.com",
+  "github": "",
+  "linkedin": "https://www.linkedin.com/in/mukil-p-35a342389/",
+  "resume": "",
+  "siteUrl": "",
+  "contactNote": "Open to Full Stack Developer internship opportunities. Drop a message and I'll get back to you.",
+  "skills": [
+    {
+      "category": "Programming Languages",
+      "color": "cyan",
+      "items": [
+        "C",
+        "C++",
+        "Java"
+      ]
+    },
+    {
+      "category": "Web Technologies",
+      "color": "blue",
+      "items": [
+        "HTML",
+        "CSS",
+        "JavaScript"
+      ]
+    },
+    {
+      "category": "Soft Skills",
+      "color": "violet",
+      "items": [
+        "Communication",
+        "Problem Solving",
+        "Team Collaboration"
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "title": "AI Portfolio Builder",
+      "description": "Designed and developed a web tool that generates structured, responsive personal portfolio layouts using HTML, CSS, and AI integration, focusing on clean UI/UX principles.",
+      "icon": "sparkles",
+      "tags": [
+        "HTML",
+        "CSS",
+        "AI Integration",
+        "UI/UX"
+      ],
+      "highlights": [
+        "Generates structured, responsive personal portfolio layouts",
+        "Built with HTML and CSS, with AI integration",
+        "Designed around clean UI/UX principles"
+      ],
+      "repo": "",
+      "demo": ""
+    },
+    {
+      "title": "Student Feedback Analysis",
+      "description": "Built a data-processing system to collect, organize, and analyze student feedback for actionable academic insights, implementing structured logic to categorize responses and summarize metrics.",
+      "icon": "chart",
+      "tags": [
+        "Java",
+        "C++",
+        "Data Analysis"
+      ],
+      "highlights": [
+        "Collects and organizes student feedback",
+        "Structured logic categorizes responses",
+        "Summarizes metrics into actionable academic insights"
+      ],
+      "repo": "",
+      "demo": ""
+    },
+    {
+      "title": "To-Do App",
+      "description": "Created a task management web application to add, track, and organize daily tasks with an intuitive interface to improve personal productivity and task prioritization.",
+      "icon": "list",
+      "tags": [
+        "HTML",
+        "CSS",
+        "Java"
+      ],
+      "highlights": [
+        "Add, track, and organize daily tasks",
+        "Intuitive interface for quick task management",
+        "Helps prioritize tasks and improve productivity"
+      ],
+      "repo": "",
+      "demo": ""
+    }
+  ],
+  "education": [
+    {
+      "degree": "Bachelor of Engineering (B.E.) in Computer Science and Engineering",
+      "institution": "Sri Krishna College of Engineering and Technology (SKCET), Coimbatore",
+      "period": "2025 — 2029 (Expected)"
+    },
+    {
+      "degree": "SSLC & HSC",
+      "institution": "Bannari Amman Vidhya Niketan School (BAVN), Sathymangalam",
+      "period": "2010 - 2025"
+    }
+  ]
+}
