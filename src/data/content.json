@@ -2,14 +2,14 @@
   "name": "Mukil P",
   "role": "Full Stack Developer",
   "subtitle": "B.E. CSE Student",
-  "tagline": "Motivated 2nd-year B.E. Computer Science and Engineering student at SKCET seeking a Full Stack Developer internship. Skilled in C, C++, Java, HTML, and CSS with experience building web applications and analytical tools using AI.",
+  "tagline": "Motivated 2nd-year B.E. Computer Science and Engineering student at SKCET seeking a Full Stack Developer internship. Skilled in C, C++, Java, HTML, and CSS with little experience building web applications and analytical tools using AI.",
   "location": "Erode, Tamil Nadu",
   "phone": "+91 86676xxxxx",
   "email": "mukilp487@gmail.com",
   "github": "",
   "linkedin": "https://www.linkedin.com/in/mukil-p-35a342389/",
   "resume": "",
-  "siteUrl": "",
+  "siteUrl": "https://mukils-portfolio.vercel.app/",
   "contactNote": "Open to Full Stack Developer internship opportunities. Drop a message and I'll get back to you.",
   "skills": [
     {
@@ -23,7 +23,7 @@
     },
     {
       "category": "Web Technologies",
-      "color": "blue",
+      "color": "green",
       "items": [
         "HTML",
         "CSS",
