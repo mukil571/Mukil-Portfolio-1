@@ -90,7 +90,7 @@ export default function Contact() {
 
   return (
     <Section id="contact" kicker="// 04" title="Get In Touch">
-      <div className="grid gap-10 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-10 lg:grid-cols-2">
         <div className="flex flex-col gap-4">
           {CHANNELS.map((channel) => (
             <ChannelCard key={channel.label} {...channel} />
@@ -103,7 +103,7 @@ export default function Contact() {
         </div>
 
         <motion.form variants={fadeUp} onSubmit={onSubmit} className="glow-border relative glass rounded-2xl p-7 space-y-4">
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <input
               type="text"
               required

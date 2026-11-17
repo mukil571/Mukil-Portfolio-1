@@ -62,7 +62,9 @@ export function createCosmos(scene, state) {
   const nebula = new THREE.Group();
   scene.add(nebula);
   const tex = cloudTexture();
-  const clouds = NEBULAE.map((n, i) => {
+  // big additive sprites are costly to fill on phone GPUs, so phones draw every other cloud
+  const nebulae = state.mobile ? NEBULAE.filter((_, i) => i % 2 === 0) : NEBULAE;
+  const clouds = nebulae.map((n, i) => {
     const mat = new THREE.SpriteMaterial({
       map: tex,
       color: new THREE.Color(n.c),
@@ -75,7 +77,7 @@ export function createCosmos(scene, state) {
     sprite.position.set(n.x, n.y, n.z);
     sprite.scale.set(n.s * 1.3, n.s, 1);
     nebula.add(sprite);
-    return { sprite, base: n.o, phase: i * 1.7, dir: i % 2 ? 1 : -1 };
+    return { sprite, base: n.o, baseX: n.x, phase: i * 1.7, dir: i % 2 ? 1 : -1 };
   });
 
   // --- shooting stars ---
@@ -148,10 +150,10 @@ export function createCosmos(scene, state) {
     update(s) {
       const pp = s.pageProgress;
       nebula.position.y = pp * 215;
-      clouds.forEach((c, i) => {
+      clouds.forEach((c) => {
         c.sprite.material.rotation += s.dt * 0.015 * c.dir;
         c.sprite.material.opacity = c.base * (0.75 + 0.25 * Math.sin(s.time * 0.35 + c.phase));
-        c.sprite.position.x = NEBULAE[i].x + Math.sin(s.time * 0.05 + c.phase) * 4;
+        c.sprite.position.x = c.baseX + Math.sin(s.time * 0.05 + c.phase) * 4;
       });
 
       if (!s.reduced) {

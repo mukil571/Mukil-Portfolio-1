@@ -89,7 +89,7 @@ export default function Projects() {
 
   return (
     <Section id="projects" kicker="// 02" title="Projects">
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         {projects.map((project) => (
           <TiltCard key={project.title} project={project} onOpen={setOpen} />
         ))}

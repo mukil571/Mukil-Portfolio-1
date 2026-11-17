@@ -65,6 +65,15 @@ export default function WarpMeter() {
   }, []);
 
   return (
+    <>
+    {/* phones/tablets: a thin progress line along the top edge */}
+    <div className="pointer-events-none fixed inset-x-0 top-0 z-[55] h-[2px] xl:hidden" aria-hidden="true">
+      <div
+        className="h-full bg-cyan-glow shadow-[0_0_8px_#00F0FF]"
+        style={{ width: `${progress * 100}%` }}
+      />
+    </div>
+
     <nav
       aria-label="Section progress"
       className="fixed right-6 top-1/2 z-40 hidden h-[46vh] -translate-y-1/2 xl:block"
@@ -114,5 +123,6 @@ export default function WarpMeter() {
         {Math.round(progress * 100)}%
       </p>
     </nav>
+    </>
   );
 }

@@ -79,6 +79,10 @@ export default function SkillConstellation() {
     let lastX = 0;
     let lastY = 0;
     let hovered = -1;
+    let selected = -1; // touch: a tapped star stays highlighted
+    let downAt = null;
+    let moved = false;
+    const focusIndex = () => (hovered >= 0 ? hovered : selected);
     let pointer = null;
     let raf = 0;
     let visible = false;
@@ -138,7 +142,7 @@ export default function SkillConstellation() {
         const a = projected[l.a];
         const b = projected[l.b];
         const depth = (a.z + b.z + 2) / 4;
-        const lit = hovered === l.a || hovered === l.b;
+        const lit = focusIndex() === l.a || focusIndex() === l.b;
         const [r, g, bl] = GROUPS[nodes[l.a].group].rgb;
         ctx.strokeStyle = `rgba(${r},${g},${bl},${(lit ? 0.75 : 0.1 + depth * 0.25)})`;
         ctx.beginPath();
@@ -162,7 +166,7 @@ export default function SkillConstellation() {
         const n = nodes[i];
         const [r, g, b] = GROUPS[n.group].rgb;
         const depth = (p.z + 1) / 2;
-        const isHover = i === hovered;
+        const isHover = i === focusIndex();
         const glowR = (isHover ? 30 : 18) * p.s;
 
         const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, glowR);
@@ -206,19 +210,23 @@ export default function SkillConstellation() {
       }
     }
 
-    function pickHover() {
-      if (!pointer || dragging) return;
+    function nearestStar(x, y, radius) {
       let best = -1;
-      let bestD = 30 * 30;
+      let bestD = radius * radius;
       projected.forEach((p, i) => {
-        const d = (p.x - pointer.x) ** 2 + (p.y - pointer.y) ** 2;
+        const d = (p.x - x) ** 2 + (p.y - y) ** 2;
         if (d < bestD && p.z > -0.2) {
           bestD = d;
           best = i;
         }
       });
-      hovered = best;
-      canvas.style.cursor = best >= 0 ? 'pointer' : 'grab';
+      return best;
+    }
+
+    function pickHover() {
+      if (!pointer || dragging) return;
+      hovered = nearestStar(pointer.x, pointer.y, 30);
+      canvas.style.cursor = hovered >= 0 ? 'pointer' : 'grab';
     }
 
     function frame(now) {
@@ -230,7 +238,7 @@ export default function SkillConstellation() {
         rotX += velX;
         velY *= 0.95;
         velX *= 0.95;
-        if (!reduced && hovered < 0) rotY += dt * 0.18;
+        if (!reduced && focusIndex() < 0) rotY += dt * 0.18;
         rotX += (-0.25 - rotX) * 0.01;
       }
       rotX = Math.max(-0.9, Math.min(0.9, rotX));
@@ -249,6 +257,8 @@ export default function SkillConstellation() {
       dragging = true;
       lastX = e.clientX;
       lastY = e.clientY;
+      downAt = { x: e.clientX, y: e.clientY };
+      moved = false;
       velX = 0;
       velY = 0;
       hovered = -1;
@@ -260,9 +270,12 @@ export default function SkillConstellation() {
       canvas.style.cursor = 'grabbing';
     }
     function onMove(e) {
-      const rect = canvas.getBoundingClientRect();
-      pointer = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+      if (e.pointerType === 'mouse') {
+        const rect = canvas.getBoundingClientRect();
+        pointer = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+      }
       if (!dragging) return;
+      if (downAt && Math.hypot(e.clientX - downAt.x, e.clientY - downAt.y) > 6) moved = true;
       const dx = e.clientX - lastX;
       const dy = e.clientY - lastY;
       lastX = e.clientX;
@@ -276,6 +289,13 @@ export default function SkillConstellation() {
       dragging = false;
       if (canvas.hasPointerCapture(e.pointerId)) canvas.releasePointerCapture(e.pointerId);
       canvas.style.cursor = 'grab';
+      // a touch tap (no drag) selects the star under the finger; tapping it again or empty space clears it
+      if (e.type === 'pointerup' && !moved && e.pointerType !== 'mouse') {
+        const rect = canvas.getBoundingClientRect();
+        const hit = nearestStar(e.clientX - rect.left, e.clientY - rect.top, 34);
+        selected = hit === selected ? -1 : hit;
+      }
+      downAt = null;
     }
     function onLeave() {
       pointer = null;

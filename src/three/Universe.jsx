@@ -22,7 +22,7 @@ export default function Universe() {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 z-0 h-full w-full pointer-events-none"
+      className="fixed left-0 top-0 z-0 h-screen w-full pointer-events-none supports-[height:100lvh]:h-[100lvh]"
       aria-hidden="true"
     />
   );

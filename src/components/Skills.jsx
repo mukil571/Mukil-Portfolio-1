@@ -2,6 +2,8 @@ import { motion } from 'framer-motion';
 import Section, { fadeUp } from './Section.jsx';
 import SkillConstellation, { GROUPS } from './SkillConstellation.jsx';
 
+const coarsePointer = window.matchMedia('(pointer: coarse)').matches;
+
 export default function Skills() {
   return (
     <Section id="skills" kicker="// 01" title="Skills">
@@ -14,11 +16,11 @@ export default function Skills() {
           <motion.div variants={fadeUp} className="glow-border relative glass overflow-hidden rounded-3xl">
             <SkillConstellation />
             <p className="pointer-events-none absolute left-5 top-4 font-mono text-[10px] uppercase tracking-[0.3em] text-slate2">
-              Drag to explore
+              {coarsePointer ? 'Swipe to spin · tap a star' : 'Drag to explore'}
             </p>
           </motion.div>
 
-          <motion.ul variants={fadeUp} className="mt-6 grid gap-4 sm:grid-cols-3">
+          <motion.ul variants={fadeUp} className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
             {GROUPS.map((group) => (
               <li key={group.label} className="flex items-start gap-3">
                 <span

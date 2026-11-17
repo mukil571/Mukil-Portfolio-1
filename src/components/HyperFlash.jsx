@@ -4,10 +4,11 @@ import { emit, on } from '../lib/bus.js';
 
 const SECRET = 'warp';
 const CONTAINER_TAGS = new Set(['HTML', 'BODY', 'MAIN', 'SECTION', 'FOOTER', 'DIV']);
+const LONG_PRESS_MS = 700;
 
 /**
  * Flash overlay for hyperjumps, plus the hidden easter egg:
- * type "warp" anywhere, or double-click empty space.
+ * type "warp" or double-click empty space (mouse), or long-press the hero name (touch).
  */
 export default function HyperFlash() {
   const [jump, setJump] = useState(null); // { id, label }
@@ -33,7 +34,10 @@ export default function HyperFlash() {
       }
     };
 
+    // phones fire dblclick on a double-tap, so this trigger is for mouse users only
+    const finePointer = window.matchMedia('(pointer: fine)');
     const onDoubleClick = (e) => {
+      if (!finePointer.matches) return;
       const t = e.target;
       if (!CONTAINER_TAGS.has(t.tagName)) return;
       if (t.closest('a, button, form, canvas, .glass, [role="dialog"]')) return;
@@ -41,13 +45,50 @@ export default function HyperFlash() {
       emit('hyperjump');
     };
 
+    // touch: hold a finger on the hero name for LONG_PRESS_MS
+    let press = null;
+    const cancelPress = () => {
+      if (press) clearTimeout(press.timer);
+      press = null;
+    };
+    const onPointerDown = (e) => {
+      if (e.pointerType === 'mouse' || !e.target.closest?.('[data-warp-target]')) return;
+      cancelPress();
+      press = {
+        x: e.clientX,
+        y: e.clientY,
+        timer: setTimeout(() => {
+          press = null;
+          navigator.vibrate?.(30);
+          emit('hyperjump');
+        }, LONG_PRESS_MS),
+      };
+    };
+    const onPointerMove = (e) => {
+      if (press && Math.hypot(e.clientX - press.x, e.clientY - press.y) > 10) cancelPress();
+    };
+    const onContextMenu = (e) => {
+      if (e.target.closest?.('[data-warp-target]')) e.preventDefault();
+    };
+
     window.addEventListener('keydown', onKey);
     window.addEventListener('dblclick', onDoubleClick);
+    window.addEventListener('pointerdown', onPointerDown);
+    window.addEventListener('pointermove', onPointerMove);
+    window.addEventListener('pointerup', cancelPress);
+    window.addEventListener('pointercancel', cancelPress);
+    window.addEventListener('contextmenu', onContextMenu);
     return () => {
       clearTimeout(timer);
+      cancelPress();
       offJump();
       window.removeEventListener('keydown', onKey);
       window.removeEventListener('dblclick', onDoubleClick);
+      window.removeEventListener('pointerdown', onPointerDown);
+      window.removeEventListener('pointermove', onPointerMove);
+      window.removeEventListener('pointerup', cancelPress);
+      window.removeEventListener('pointercancel', cancelPress);
+      window.removeEventListener('contextmenu', onContextMenu);
     };
   }, []);
 

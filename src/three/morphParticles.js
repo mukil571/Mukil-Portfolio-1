@@ -162,12 +162,13 @@ function fitFont(ctx, weightFamily, text, targetWidth, spacingEm = 0) {
 const NAME_FONT = '800 {s}px Inter, sans-serif';
 const MONO_FONT = '600 {s}px "JetBrains Mono", monospace';
 
-function nameShape(count) {
+function nameShape(count, mobile) {
   const W = 1600;
   const H = 700;
   const nameW = W * 0.9;
   const name = (profile.name || ' ').toUpperCase();
-  const role = (profile.role || '').toUpperCase().trim();
+  // on phones the particle role line would be too small to read; the role is shown as text below instead
+  const role = mobile ? '' : (profile.role || '').toUpperCase().trim();
   let nameSize = 0;
   const nameLayer = {
     share: role ? 0.76 : 1,
@@ -408,7 +409,7 @@ export function createMorph(scene, state) {
   const count = state.mobile ? 3500 : 9000;
   const shapes = [
     scatterShape(count),
-    nameShape(count),
+    nameShape(count, state.width < 640),
     codeShape(count),
     rocketShape(count),
     capShape(count),

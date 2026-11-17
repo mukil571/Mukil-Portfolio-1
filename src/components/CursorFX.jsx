@@ -27,6 +27,14 @@ export default function CursorFX() {
     let lastY = null;
     let raf = 0;
     let last = performance.now();
+    let touchStart = null;
+
+    // the loop only runs while there is something to draw, so idle phones don't burn battery
+    function wake() {
+      if (raf) return;
+      last = performance.now();
+      raf = requestAnimationFrame(frame);
+    }
 
     function resize() {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -73,11 +81,10 @@ export default function CursorFX() {
       }
       lastX = e.clientX;
       lastY = e.clientY;
+      wake();
     }
 
-    function onDown(e) {
-      const x = e.clientX;
-      const y = e.clientY;
+    function burst(x, y) {
       const n = 42;
       for (let i = 0; i < n; i++) {
         const a = (i / n) * Math.PI * 2 + Math.random() * 0.3;
@@ -86,6 +93,21 @@ export default function CursorFX() {
       }
       rings.push({ x, y, age: 0 });
       emit('sfx', 'blip');
+      wake();
+    }
+
+    function onDown(e) {
+      if (e.pointerType === 'mouse') burst(e.clientX, e.clientY);
+      else touchStart = { x: e.clientX, y: e.clientY, t: performance.now() };
+    }
+
+    // touch: only a quick tap bursts, not the start of every scroll
+    function onUp(e) {
+      if (e.pointerType === 'mouse' || !touchStart) return;
+      const quick = performance.now() - touchStart.t < 400;
+      const still = Math.hypot(e.clientX - touchStart.x, e.clientY - touchStart.y) < 10;
+      if (quick && still) burst(e.clientX, e.clientY);
+      touchStart = null;
     }
 
     function onLeave() {
@@ -153,14 +175,14 @@ export default function CursorFX() {
       }
 
       ctx.globalCompositeOperation = 'source-over';
-      raf = requestAnimationFrame(frame);
+      raf = particles.length || rings.length || head.visible ? requestAnimationFrame(frame) : 0;
     }
 
     resize();
-    raf = requestAnimationFrame(frame);
     window.addEventListener('resize', resize);
     window.addEventListener('pointermove', onMove);
     window.addEventListener('pointerdown', onDown);
+    window.addEventListener('pointerup', onUp);
     document.documentElement.addEventListener('pointerleave', onLeave);
 
     return () => {
@@ -168,6 +190,7 @@ export default function CursorFX() {
       window.removeEventListener('resize', resize);
       window.removeEventListener('pointermove', onMove);
       window.removeEventListener('pointerdown', onDown);
+      window.removeEventListener('pointerup', onUp);
       document.documentElement.removeEventListener('pointerleave', onLeave);
     };
   }, []);

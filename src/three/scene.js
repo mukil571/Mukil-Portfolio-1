@@ -54,13 +54,21 @@ export function mountUniverse(canvas) {
   const modules = [createGalaxy(scene, state), createCosmos(scene, state)];
   let disposed = false;
 
+  let sized = false;
   function resize() {
-    state.width = window.innerWidth;
-    state.height = window.innerHeight;
-    state.pixelRatio = Math.min(window.devicePixelRatio || 1, 1.5);
+    // the canvas is CSS-sized to the large viewport (100lvh), so a phone's address bar
+    // showing/hiding doesn't change it and this expensive re-layout is skipped
+    const width = canvas.clientWidth || window.innerWidth;
+    const height = canvas.clientHeight || window.innerHeight;
+    const pixelRatio = Math.min(window.devicePixelRatio || 1, state.mobile ? 1.25 : 1.5);
+    if (sized && width === state.width && height === state.height && pixelRatio === state.pixelRatio) return;
+    sized = true;
+    state.width = width;
+    state.height = height;
+    state.pixelRatio = pixelRatio;
     state.sizeFactor = Math.min(1.25, Math.max(0.75, state.height / 900));
     renderer.setPixelRatio(state.pixelRatio);
-    renderer.setSize(state.width, state.height);
+    renderer.setSize(state.width, state.height, false);
     camera.aspect = state.width / state.height;
     camera.updateProjectionMatrix();
     state.view.h = 2 * CAMERA_Z * Math.tan(THREE.MathUtils.degToRad(FOV / 2));
@@ -130,7 +138,7 @@ export function mountUniverse(canvas) {
     } else if (scrollWarp < 0.4) {
       warpHigh = false;
     }
-    const maxScroll = document.documentElement.scrollHeight - state.height;
+    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
     state.pageProgress = maxScroll > 0 ? state.scrollY / maxScroll : 0;
 
     // camera eases toward the cursor for a subtle 3D parallax

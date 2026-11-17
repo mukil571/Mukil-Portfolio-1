@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Volume2, VolumeX } from 'lucide-react';
 import { setSound } from '../audio/sound.js';
+import { flags } from '../lib/bus.js';
 
 const STORAGE_KEY = 'mp-sound';
 
@@ -20,12 +21,15 @@ function writePref(on) {
   }
 }
 
-/** Off-by-default ambient sound toggle. A remembered "on" resumes on the first interaction. */
-export default function SoundToggle() {
-  const [enabled, setEnabled] = useState(false);
+/**
+ * Off-by-default ambient sound toggle. A remembered "on" resumes on the first interaction.
+ * `inline` renders it in place (the mobile menu); otherwise it floats bottom-left on tablets and up.
+ */
+export default function SoundToggle({ inline = false }) {
+  const [enabled, setEnabled] = useState(() => flags.sound);
 
   useEffect(() => {
-    if (!readPref()) return undefined;
+    if (!readPref() || flags.sound) return undefined;
     // browsers block audio until a user gesture, so wait for one
     const resume = () => {
       setEnabled(true);
@@ -54,7 +58,9 @@ export default function SoundToggle() {
       aria-pressed={enabled}
       aria-label={enabled ? 'Turn sound off' : 'Turn sound on'}
       title={enabled ? 'Sound on' : 'Sound off'}
-      className={`fixed bottom-5 left-5 z-50 flex h-11 w-11 items-center justify-center rounded-full border backdrop-blur-md transition-all duration-300 ${
+      className={`${
+        inline ? 'relative flex' : 'fixed bottom-5 left-5 z-50 hidden md:flex'
+      } h-11 w-11 items-center justify-center rounded-full border backdrop-blur-md transition-all duration-300 ${
         enabled
           ? 'border-cyan-glow/60 bg-cyan-glow/10 text-cyan-glow shadow-glow-sm'
           : 'border-white/15 bg-black/50 text-slate2 hover:border-white/40 hover:text-white'

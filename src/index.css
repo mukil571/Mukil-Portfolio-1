@@ -75,7 +75,8 @@ body {
 
 @layer components {
   .glass {
-    @apply bg-[#04060b]/40 backdrop-blur-[3px] border border-white/10;
+    /* phones: lighter blur (cheaper over WebGL) with a more opaque fill so text stays readable */
+    @apply bg-[#04060b]/55 backdrop-blur-[2px] border border-white/10 md:bg-[#04060b]/40 md:backdrop-blur-[3px];
   }
   .section-heading {
     @apply font-mono text-xs uppercase tracking-[0.35em] text-cyan-glow;

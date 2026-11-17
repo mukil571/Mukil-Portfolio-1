@@ -15,7 +15,7 @@ export default function Hero() {
   const state = started ? 'show' : 'hidden';
 
   return (
-    <section id="intro" className="relative min-h-screen flex flex-col overflow-hidden">
+    <section id="intro" className="relative min-h-[100svh] flex flex-col overflow-hidden">
       {/* soft radial glow behind the particle name (drawn by the WebGL universe) */}
       <div
         className="absolute left-1/2 top-[28%] -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[38vh] rounded-full pointer-events-none"
@@ -33,18 +33,19 @@ export default function Hero() {
       {/* the WebGL particles form the name inside this box, so it scrolls with the hero */}
       <div
         data-shape-anchor="intro"
-        className="mx-auto mt-24 mb-6 w-[min(88vw,980px)] min-h-[120px] flex-1"
+        data-warp-target
+        className="mx-auto mt-20 mb-4 w-[94vw] min-h-[150px] flex-1 select-none sm:mt-24 sm:mb-6 sm:w-[min(88vw,980px)]"
         aria-hidden="true"
       />
 
       <motion.div
         initial="hidden"
         animate={state}
-        className="relative z-10 flex flex-col items-center text-center px-6 pb-14 sm:pb-16"
+        className="relative z-10 flex flex-col items-center text-center px-5 pb-10 sm:px-6 sm:pb-16"
       >
         <motion.p
           variants={rise(0.3)}
-          className="font-mono text-[11px] sm:text-xs uppercase tracking-[0.3em] text-slate2 mb-5"
+          className="font-mono text-[10px] sm:text-xs uppercase tracking-[0.25em] sm:tracking-[0.3em] text-slate2 mb-4 sm:mb-5"
         >
           <ScrambleText key={`${state}-${profile.role}`} text={profile.role} delay={400} />
           {profile.subtitle && (
@@ -57,21 +58,21 @@ export default function Hero() {
 
         <motion.p
           variants={rise(0.45)}
-          className="max-w-2xl text-sm sm:text-base leading-relaxed text-slate2 mb-9"
+          className="max-w-2xl text-[13.5px] sm:text-base leading-relaxed text-slate2 mb-7 sm:mb-9"
         >
           {profile.tagline}
         </motion.p>
 
-        <motion.div variants={rise(0.6)} className="flex flex-col sm:flex-row items-center gap-4">
+        <motion.div variants={rise(0.6)} className="flex flex-row flex-wrap justify-center items-center gap-3 sm:gap-4">
           <a
             href="#projects"
-            className="glow-border relative rounded-full border border-cyan-glow/60 bg-black/40 px-8 py-3 font-mono text-xs uppercase tracking-[0.25em] text-cyan-glow shadow-glow-sm backdrop-blur-sm transition-all duration-300 hover:bg-cyan-glow/10 hover:shadow-glow-md"
+            className="glow-border relative rounded-full border border-cyan-glow/60 bg-black/40 px-5 py-2.5 font-mono text-[10px] uppercase tracking-[0.2em] text-cyan-glow shadow-glow-sm backdrop-blur-sm transition-all duration-300 hover:bg-cyan-glow/10 hover:shadow-glow-md sm:px-8 sm:py-3 sm:text-xs sm:tracking-[0.25em]"
           >
             View Projects
           </a>
           <a
             href="#contact"
-            className="rounded-full border border-white/15 bg-black/40 px-8 py-3 font-mono text-xs uppercase tracking-[0.25em] text-white backdrop-blur-sm transition-all duration-300 hover:border-white/40 hover:bg-white/5"
+            className="rounded-full border border-white/15 bg-black/40 px-5 py-2.5 font-mono text-[10px] uppercase tracking-[0.2em] text-white backdrop-blur-sm transition-all duration-300 hover:border-white/40 hover:bg-white/5 sm:px-8 sm:py-3 sm:text-xs sm:tracking-[0.25em]"
           >
             Contact Me
           </a>
@@ -85,9 +86,9 @@ export default function Hero() {
           href="#skills"
           aria-label="Scroll to skills"
           variants={{ hidden: { opacity: 0 }, show: { opacity: 1, transition: { duration: 1, delay: 1.1 } } }}
-          className="mt-10 flex flex-col items-center gap-2 text-slate2 hover:text-cyan-glow transition-colors"
+          className="mt-6 flex flex-col items-center gap-2 text-slate2 hover:text-cyan-glow transition-colors sm:mt-10"
         >
-          <span className="font-mono text-[10px] uppercase tracking-[0.35em]">Scroll to warp</span>
+          <span className="hidden font-mono text-[10px] uppercase tracking-[0.35em] sm:inline">Scroll to warp</span>
           <ArrowDown className="w-5 h-5 animate-bounce" />
         </motion.a>
       </motion.div>

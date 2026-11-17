@@ -13,7 +13,7 @@ export const stagger = {
 
 export default function Section({ id, kicker, title, children }) {
   return (
-    <section id={id} className="relative z-10 px-6 py-24 sm:py-32">
+    <section id={id} className="relative z-10 px-6 py-16 sm:py-32">
       <div className="mx-auto max-w-6xl">
         <motion.div
           variants={stagger}
@@ -21,7 +21,7 @@ export default function Section({ id, kicker, title, children }) {
           whileInView="visible"
           viewport={{ once: true, margin: '-80px' }}
         >
-          <div className="mb-12 flex items-end justify-between gap-8 sm:mb-16">
+          <div className="mb-8 flex flex-col gap-4 sm:mb-12 lg:mb-16 lg:flex-row lg:items-end lg:justify-between lg:gap-8">
             <div>
               <motion.p variants={fadeUp} className="section-heading mb-3">
                 <ScrambleText text={kicker} speed={60} />
@@ -33,10 +33,11 @@ export default function Section({ id, kicker, title, children }) {
                 <ScrambleText text={title} delay={150} speed={55} />
               </motion.h2>
             </div>
-            {/* empty slot the WebGL particles form this section's shape in */}
+            {/* empty slot the WebGL particles form this section's shape in:
+                a strip under the title on phones/tablets, a box beside it on desktop */}
             <div
               data-shape-anchor={id}
-              className="hidden h-[230px] w-[340px] shrink-0 lg:block"
+              className="h-[150px] w-full shrink-0 sm:h-[180px] lg:h-[230px] lg:w-[340px]"
               aria-hidden="true"
             />
           </div>

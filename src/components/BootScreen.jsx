@@ -5,7 +5,7 @@ import { profile } from '../data/content.js';
 
 const LINES = [
   'INITIALIZING UNIVERSE',
-  'LOADING STARFIELD · 28,000 STARS',
+  'LOADING STARFIELD',
   'SPAWNING NEBULAE',
   'CALIBRATING PARTICLES',
   `PLOTTING COURSE → ${profile.name.toUpperCase()}`,

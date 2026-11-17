@@ -199,7 +199,7 @@ export function createGalaxy(scene, state) {
   scene.add(group);
 
   const galaxyMat = starMaterial(state, { spin: 0.08, depthRef: 240, opacity: 0.85 });
-  const galaxy = new THREE.Points(buildGalaxy(state.mobile ? 9000 : 28000), galaxyMat);
+  const galaxy = new THREE.Points(buildGalaxy(state.mobile ? 6000 : 28000), galaxyMat);
   group.add(galaxy);
 
   const shellMat = starMaterial(state, { spin: 0, depthRef: 240, opacity: 0.9 });
@@ -221,7 +221,7 @@ export function createGalaxy(scene, state) {
     depthWrite: false,
     blending: THREE.AdditiveBlending,
   });
-  const warp = new THREE.LineSegments(buildWarp(state.mobile ? 350 : 900, WARP_DEPTH), warpMat);
+  const warp = new THREE.LineSegments(buildWarp(state.mobile ? 220 : 900, WARP_DEPTH), warpMat);
   warp.frustumCulled = false;
   scene.add(warp);
 
